@@ -3,6 +3,7 @@ package com.davipeterson.qrcode.generator.controller;
 import com.davipeterson.qrcode.generator.dto.QrCodeGenerateRequest;
 import com.davipeterson.qrcode.generator.dto.QrCodeGenerateResponse;
 import com.davipeterson.qrcode.generator.services.QrCodeGeneratorService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class QrCodeController {
     }
 
     @PostMapping
-    public ResponseEntity<QrCodeGenerateResponse> generate(@RequestBody QrCodeGenerateRequest request) {
+    public ResponseEntity<QrCodeGenerateResponse> generate(@Valid @RequestBody QrCodeGenerateRequest request) {
         try {
             QrCodeGenerateResponse response = service.generate(request.text());
             return ResponseEntity.ok(response);

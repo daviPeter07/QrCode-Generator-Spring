@@ -24,6 +24,8 @@ API REST para geração de QR codes com armazenamento em disco local ou MinIO (S
 - Java 21 + Spring Boot 4.0.6
 - Google ZXing 3.5.4 (geração dos QR codes)
 - AWS SDK S3 2.24.12 (compatível com MinIO)
+- springdoc-openapi 3.0.3 (documentação automática)
+- Jakarta Validation (validação com @NotBlank)
 - Maven wrapper
 
 ## Como rodar
@@ -38,6 +40,7 @@ docker compose up -d --build
 |---|---|
 | API | http://localhost:8080 |
 | Console MinIO | http://localhost:9001 |
+| Swagger UI | http://localhost:8080/swagger-ui.html |
 
 ### Local (sem Docker, salva em disco)
 
@@ -63,6 +66,8 @@ Resposta:
 }
 ```
 
+Requisições com `text` vazio retornam erro 400.
+
 ## Perfis Spring
 
 | Perfil | Storage | Descrição |
@@ -77,6 +82,13 @@ docker compose up -d               # via Docker (já configurado)
 # ou
 .\mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=s3
 ```
+
+## Documentação da API
+
+Com o app rodando, acesse:
+
+- **Swagger UI:** http://localhost:8080/swagger-ui.html
+- **OpenAPI JSON:** http://localhost:8080/v3/api-docs
 
 ## Variáveis de ambiente
 
@@ -97,6 +109,7 @@ Configure no `.env` (para Docker) ou exporte diretamente:
 src/
 └── main/java/com/davipeterson/qrcode/generator/
     ├── Application.java              # Entry point Spring Boot
+    ├── config/OpenApiConfig.java     # Configuração do Swagger
     ├── controller/QrCodeController.java
     ├── dto/
     │   ├── QrCodeGenerateRequest.java
