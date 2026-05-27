@@ -1,6 +1,6 @@
 services:
   app:
-    build: .
+    build: ./backend
     container_name: qrcode-api
     ports:
       - "8080:8080"
