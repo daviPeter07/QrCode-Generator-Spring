@@ -1,36 +1,39 @@
 # QR Code Generator
 
-API REST para geração de QR codes com armazenamento em disco local ou MinIO (S3-compatible).
+Monorepo com backend Spring Boot e frontend Angular para geração de QR codes com armazenamento em disco local ou MinIO (S3-compatible).
 
 ## Arquitetura
 
 ```
-[Client] ── POST /api/qrcode ──→ QrCodeController
-                                       │
-                                QrCodeGeneratorService
-                                       │
-                                StoragePorts (interface)
-                                       │
-                          ┌────────────┴────────────┐
-                    LocalStorageAdapter    S3StorageAdapter
-                    (profile default)      (profile s3)
-                          │                     │
-                    ./qrcodes/              MinIO
-                    (disco local)      (bucket S3 local)
+[Angular] ── POST /api/qrcode ──→ Spring Boot API
+                                        │
+                                 QrCodeGeneratorService
+                                        │
+                                 StoragePorts (interface)
+                                        │
+                           ┌────────────┴────────────┐
+                     LocalStorageAdapter    S3StorageAdapter
+                     (profile default)      (profile s3)
+                           │                     │
+                     ./qrcodes/              MinIO
+                     (disco local)      (bucket S3 local)
 ```
 
 ### Stack
 
+**Backend:**
 - Java 21 + Spring Boot 4.0.6
 - Google ZXing 3.5.4 (geração dos QR codes)
 - AWS SDK S3 2.24.12 (compatível com MinIO)
 - springdoc-openapi 3.0.3 (documentação automática)
 - Jakarta Validation (validação com @NotBlank)
-- Maven wrapper
+
+**Frontend:**
+- Angular (em estruturação)
 
 ## Como rodar
 
-### Com Docker (app + MinIO)
+### Com Docker (backend + MinIO)
 
 ```bash
 docker compose up -d --build
@@ -38,17 +41,16 @@ docker compose up -d --build
 
 | Serviço | Acesso |
 |---|---|
-| API | http://localhost:8080 |
+| Backend API | http://localhost:8080 |
 | Console MinIO | http://localhost:9001 |
 | Swagger UI | http://localhost:8080/swagger-ui.html |
 
-### Local (sem Docker, salva em disco)
+### Backend local (sem Docker, salva em disco)
 
 ```bash
+cd backend
 .\mvnw.cmd spring-boot:run
 ```
-
-A API fica em http://localhost:8080. Os QR codes são salvos em `./qrcodes/` e servidos como conteúdo estático.
 
 ## Uso da API
 
@@ -80,19 +82,20 @@ Para ativar o profile S3:
 ```bash
 docker compose up -d               # via Docker (já configurado)
 # ou
+cd backend
 .\mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=s3
 ```
 
 ## Documentação da API
 
-Com o app rodando, acesse:
+Com o backend rodando, acesse:
 
 - **Swagger UI:** http://localhost:8080/swagger-ui.html
 - **OpenAPI JSON:** http://localhost:8080/v3/api-docs
 
 ## Variáveis de ambiente
 
-Configure no `.env` (para Docker) ou exporte diretamente:
+Configure no `.env` (raiz do monorepo) ou exporte diretamente:
 
 | Variável | Default | Descrição |
 |---|---|---|
@@ -103,22 +106,27 @@ Configure no `.env` (para Docker) ou exporte diretamente:
 | `AWS_ACCESS_KEY_ID` | `minioadmin` | Access key |
 | `AWS_SECRET_ACCESS_KEY` | `minioadmin` | Secret key |
 
-## Estrutura do projeto
+## Estrutura do projeto (monorepo)
 
 ```
-src/
-└── main/java/com/davipeterson/qrcode/generator/
-    ├── Application.java              # Entry point Spring Boot
-    ├── config/OpenApiConfig.java     # Configuração do Swagger
-    ├── controller/QrCodeController.java
-    ├── dto/
-    │   ├── QrCodeGenerateRequest.java
-    │   └── QrCodeGenerateResponse.java
-    ├── ports/StoragePorts.java       # Interface (port)
-    ├── services/QrCodeGeneratorService.java
-    └── infra/
-        ├── LocalStorageAdapter.java  # Storage em disco (default)
-        └── S3StorageAdapter.java     # Storage S3/MinIO (profile s3)
+qrcode.generator/
+├── backend/                        # Spring Boot API
+│   ├── Dockerfile
+│   ├── pom.xml
+│   └── src/main/java/.../
+│       ├── Application.java
+│       ├── config/OpenApiConfig.java
+│       ├── controller/QrCodeController.java
+│       ├── dto/
+│       ├── ports/StoragePorts.java
+│       ├── services/QrCodeGeneratorService.java
+│       └── infra/
+│           ├── LocalStorageAdapter.java
+│           └── S3StorageAdapter.java
+├── frontend/                       # Angular (em estruturação)
+├── docker-compose.yml
+├── .env
+└── README.md
 ```
 
 ## Comandos úteis
