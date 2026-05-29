@@ -41,4 +41,8 @@ public class QrCodeGeneratorService {
 
         return new QrCodeGenerateResponse(url);
     }
+
+    public QrCodeGenerateResponse getLastGeneratedQrCode() {
+        return new QrCodeGenerateResponse(storagePorts.getLastUploadedFileUrl());
+    }
 }

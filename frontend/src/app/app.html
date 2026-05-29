@@ -1,0 +1,51 @@
+<main class="page">
+  <section class="hero">
+    <div class="hero__content">
+      <p class="hero__eyebrow">Gerador de Qr Code</p>
+      <h1 class="hero__title">Transforme qualquer link em um Qr Code</h1>
+      <p class="hero__subtitle">
+        Cole sua URL abaixo e gere um QR Code simples, rápido e pronto para uso.
+      </p>
+
+      <form class="form" (ngSubmit)="generateQrCode()">
+        <label for="form__label" for="url"> Link do Qr Code </label>
+
+        <input
+          id="url"
+          name="url"
+          class="form__input"
+          type="url"
+          placeholder="https://exemplo.com"
+          [(ngModel)]="url"
+        />
+        @if (errorMessage) {
+          <p class="feedback feedback--error">
+            {{ errorMessage }}
+          </p>
+        }
+
+        <button
+          class="form__button"
+          type="submit"
+          [disabled]="isLoading"
+          [class.form__button--loading]="isLoading"
+        >
+          <!--ternario mto massa-->
+          {{ isLoading ? 'Gerando...' : 'Gerar Qr Code' }}
+        </button>
+      </form>
+    </div>
+
+    @if (qrCodeImageUrl) {
+      <div class="qr-card">
+        <p class="qr-card__title">Seu Qr Code</p>
+
+        <img
+          class="qr-card__image"
+          src="qrCodeImageUrl"
+          alt="Qr Code gerado a partir do link informado"
+        />
+      </div>
+    }
+  </section>
+</main>

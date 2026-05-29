@@ -11,9 +11,13 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.BucketAlreadyOwnedByYouException;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Object;
 
 import java.net.URI;
+import java.util.Comparator;
+import java.util.NoSuchElementException;
 
 @Component
 @Profile("s3")
@@ -66,5 +70,21 @@ public class S3StorageAdapter implements StoragePorts {
         s3Client.putObject(putObjectRequest, RequestBody.fromBytes(fileData));
 
         return publicUrl + "/" + bucketName + "/" + fileName + ".png";
+    }
+
+    @Override
+    public String getLastUploadedFileUrl() {
+        ListObjectsV2Request listObjectsRequest = ListObjectsV2Request.builder()
+                .bucket(bucketName)
+                .build();
+
+        S3Object lastObject = s3Client.listObjectsV2(listObjectsRequest)
+                .contents()
+                .stream()
+                .filter(object -> object.key().endsWith(".png"))
+                .max(Comparator.comparing(S3Object::lastModified))
+                .orElseThrow(() -> new NoSuchElementException("Nenhum QR code encontrado"));
+
+        return publicUrl + "/" + bucketName + "/" + lastObject.key();
     }
 }

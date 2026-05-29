@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/qrcode")
 public class QrCodeController {
@@ -24,6 +25,16 @@ public class QrCodeController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<QrCodeGenerateResponse> getQrCode() {
+        try {
+            QrCodeGenerateResponse response = service.getLastGeneratedQrCode();
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
         }
     }
 }

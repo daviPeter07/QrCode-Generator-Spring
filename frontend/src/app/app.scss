@@ -1,0 +1,144 @@
+.page {
+  min-height: 100vh;
+  background: #0f0f0f;
+  color: #f8f8f8;
+}
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+
+  &__content {
+    width: 100%;
+    max-width: 42rem;
+    padding: 2rem;
+    border: 1px solid rgba(255, 122, 0, 0.25);
+    border-radius: 1.5rem;
+    background: #171717;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+  }
+
+  &__eyebrow {
+    margin: 0 0 0.75rem;
+    color: #ff7a00;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  &__title {
+    margin: 0;
+    color: #ffffff;
+    font-size: 2rem;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+  }
+
+  &__subtitle {
+    margin: 1rem 0 0;
+    color: #c7c7c7;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+}
+
+.form {
+  display: grid;
+  gap: 0.875rem;
+  margin-top: 2rem;
+
+  &__label {
+    color: #f3f3f3;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #2f2f2f;
+    border-radius: 1rem;
+    outline: none;
+    background: #101010;
+    color: #ffffff;
+    font-size: 1rem;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      background 0.2s ease;
+
+    &::placeholder {
+      color: #777777;
+    }
+
+    &:focus {
+      border-color: #ff7a00;
+      background: #141414;
+      box-shadow: 0 0 0 4px rgba(255, 122, 0, 0.16);
+    }
+  }
+
+  &__button {
+    padding: 1rem 1.25rem;
+    border: 0;
+    border-radius: 1rem;
+    background: #ff7a00;
+    color: #0f0f0f;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition:
+      transform 0.2s ease,
+      opacity 0.2s ease,
+      background 0.2s ease;
+
+    &:hover {
+      background: #ff8f26;
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    &--loading {
+      opacity: 0.62;
+    }
+  }
+}
+
+.feedback {
+  font-size: 0.95rem;
+
+  &--error {
+    color: #ff6b6b;
+  }
+}
+
+.qr-card {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 122, 0, 0.22);
+  border-radius: 1.25rem;
+  background: #101010;
+
+  &__title {
+    margin: 0;
+    color: #f3f3f3;
+    font-weight: 700;
+  }
+
+  &__image {
+    width: min(100%, 16rem);
+    padding: 1rem;
+    border-radius: 1rem;
+    background: #ffffff;
+  }
+}
